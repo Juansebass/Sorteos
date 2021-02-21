@@ -102,18 +102,74 @@
 
                     {%- endfor %}
 
-
-
-
-
-
-
                 </form>
 
+            </div>
+        </div>
 
+        <br>
+
+        <div class="row">
+            <div class="col-sm-9 mx-auto justify-content-center  ">
+                <h3>Participantes</h3>
+
+                {%- for category, message in get_flashed_messages(with_categories = true) %}
+
+                        {% if category=="eliminado" %}
+                            <div class = "alert alert-success">
+
+                                {{ message }}
+                            </div>
+                        {% endif %}
+
+                        {% if category=="recibido" %}
+                            <div class = "alert alert-danger">
+
+                                {{ message }}
+                            </div>
+                        {% endif %}
+
+
+
+
+                    {%- endfor %}
+
+                <table class="table tablas" ">
+                    <thead>
+                        <tr class="tableHead">
+                            <th scope="col">Tipo de documento</th>
+                            <th scope="col">Número de documento</th>
+                            <th scope="col">Nombres</th>
+                            <th scope="col">Apellidos</th>
+                            <th scope="col">Fecha de nacimiento</th>
+                            <th scope="col">Acción</th>
+                         </tr>
+                    </thead>
+                    <tbody>
+                        {% for participante in participantes %}
+                            <tr>
+                                <td>{{participante.tipo_documento}}</td>
+                                <td>{{participante.numero_documento}}</td>
+                                <td>{{participante.nombres}}</td>
+                                <td>{{participante.apellido}}</td>
+                                <td>{{participante.fecha_nacimiento}}</td>
+
+
+                                <td>
+                                    <a href="/delete/{{participante.numero_documento}}" class="btn btn-danger btn-xs" onclick="return confirm('Quieres eliminar el participante ?')">Eliminar</a>
+                                </td>
+                            </tr>
+
+                        {% endfor %}
+
+
+                    </tbody>
+                </table>
 
 
             </div>
+
+
         </div>
 
 

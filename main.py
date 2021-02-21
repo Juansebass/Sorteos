@@ -23,9 +23,6 @@ class Participantes(db.Model):
 
 
 
-
-
-
 @app.route('/', methods=['GET', 'POST'])
 def inicial():
     if request.method == 'POST':
@@ -50,8 +47,23 @@ def inicial():
     #Obteniendo todos los participantes para mostrarlos en tabla
     participantes = Participantes.query.all()
 
-    return render_template('index.html')
+
+    return render_template('index.html', participantes = participantes)
 
 #url_for('function')
 #request.form['username']
 #redirect(url_for('login'))
+
+
+#Ruta para eliminar un participante
+@app.route('/delete/<id>/', methods=['GET', 'POST'])
+def delete(id):
+    participante = Participantes.query.get(id)
+    if participante.recibio_premio == "SI":
+         flash("No se puede eliminar el participante, ya recibió premio", 'recibido')
+    else:
+        db.session.delete(participante)
+        db.session.commit()
+        flash("Se ha eliminado el participante", 'eliminado')
+
+    return redirect(url_for('inicial'))
