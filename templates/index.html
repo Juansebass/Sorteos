@@ -110,7 +110,7 @@
         <br>
 
         <div class="row">
-            <div class="col-sm-9 mx-auto justify-content-center  ">
+            <div class="col-sm-10 mx-auto justify-content-center  ">
                 <h3>Participantes</h3>
 
                 {%- for category, message in get_flashed_messages(with_categories = true) %}
@@ -129,12 +129,18 @@
                             </div>
                         {% endif %}
 
+                        {% if category=="editado" %}
+                            <div class = "alert alert-success">
+
+                                {{ message }}
+                            </div>
+                        {% endif %}
 
 
 
                     {%- endfor %}
 
-                <table class="table tablas" ">
+                <table class="table tablas" >
                     <thead>
                         <tr class="tableHead">
                             <th scope="col">Tipo de documento</th>
@@ -157,8 +163,91 @@
 
                                 <td>
                                     <a href="/delete/{{participante.numero_documento}}" class="btn btn-danger btn-xs" onclick="return confirm('Quieres eliminar el participante ?')">Eliminar</a>
+                                    <button type="button" class="btn btn-warning btn-xs" data-bs-toggle="modal" data-bs-target="#modaledit{{participante.numero_documento}}">Editar</button>
                                 </td>
                             </tr>
+
+                        <div id="modaledit{{participante.numero_documento}}" class="modal fade" role="dialog">
+                            <div class="modal-dialog">
+                                 <div class="modal-content">
+                                    <div class="modal-header">
+                                         <h4 class="modal-title">Editar participante</h4>
+                                    </div>
+
+                                    <div class="modal-body">
+                                        <form action="{{url_for('update')}}" method="POST">
+
+                                             <div class="form-group">
+                                                <label for="" >Nombres </label>
+                                                <input type="text" class="form-control" name="nombres"  value="{{participante.nombres}}">
+                                             </div>
+                                             <br>
+
+                                            <div class="form-group">
+                                            <label for="" >Apellidos </label>
+                                            <input type="text" class="form-control" name="apellidos" value="{{participante.apellido}}" >
+                                            </div>
+                                            <br>
+
+                                            <div class="row ">
+
+                                                <div class="col">
+                                                    <label for="" >Tipo de documento </label>
+                                                    <select name="documento" class="form-select" aria-label="Default select example" value="{{participante.tipo_documento}}" >
+                                                        <option selected>Selecciona el tipo de documento</option>
+                                                    <option value="TI">Tarjeta de identidad</option>
+                                                    <option value="CC">Cédula de ciudadanía</option>
+                                                    <option value="PP">Pasaporte</option>
+                                                    </select>
+                                                </div>
+
+
+
+                                                <div class="col">
+                                                    <div class="form-group">
+                                                    <label for="" >Número </label>
+                                                        <input type="hidden"  name="id" value="{{participante.numero_documento}}">
+                                                    <input type="text" class="form-control" name="numero" value={{participante.numero_documento}}>
+                                                    </div>
+                                                    <br>
+                                                </div>
+
+
+
+
+                                            </div>
+
+                                            <div class="row">
+
+                                                <div class="col-auto">
+
+                                                    <div class="form-group ">
+                                                        <label for="" >Fecha de nacimiento </label>
+                                                        <input type="date" class="form-control" name="nacimiento" value="{{participante.fecha_nacimiento}}">
+                                                    </div>
+                                                    <br>
+                                                </div>
+
+                                            </div>
+
+
+                                         <div class="form-group ">
+                                            <button class="boton btn btn-primary mx-0" type="submit">Editar</button>
+                                         </div>
+                                        </form>
+
+                                    </div>
+
+                                     <div class="modal-footer">
+                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+
+                                     </div>
+
+
+                                </div>
+                            </div>
+
+                        </div>
 
                         {% endfor %}
 

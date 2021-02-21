@@ -67,3 +67,21 @@ def delete(id):
         flash("Se ha eliminado el participante", 'eliminado')
 
     return redirect(url_for('inicial'))
+
+@app.route('/update', methods=['GET', 'POST'])
+def update():
+    if request.method == 'POST':
+        persona = Participantes.query.get(request.form.get('id'))
+
+
+
+        persona.tipo_documento = request.form['documento']
+        persona.numero_documento = request.form['numero']
+        persona.nombres = request.form['nombres']
+        persona.apellido = request.form['apellidos']
+        persona.fecha_nacimiento = request.form['nacimiento']
+
+        db.session.commit()
+        flash("Se ha editado el participante", 'editado')
+
+        return redirect(url_for('inicial'))
