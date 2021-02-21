@@ -31,7 +31,7 @@ def inicial():
     if request.method == 'POST':
         return 'Post'
     else:
-        flash('You were successfully logged in', 'error')
+
         return render_template('index.html')
 
 #url_for('function')
