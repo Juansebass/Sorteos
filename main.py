@@ -8,7 +8,7 @@ app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.sqlite3'
 db = SQLAlchemy(app)
 
-
+#Creando modelo para guardar los participantesen la base de datos
 class Participantes(db.Model):
     tipo_documento = db.Column(db.String(4))
     numero_documento = db.Column(db.String(20), primary_key=True)
@@ -29,10 +29,28 @@ class Participantes(db.Model):
 @app.route('/', methods=['GET', 'POST'])
 def inicial():
     if request.method == 'POST':
-        return 'Post'
-    else:
+        #Verificando que todos los campos se hayan llenado
+        if not request.form['nombres'] or not request.form['apellidos'] or not request.form['documento'] or not request.form['numero'] or not request.form['nacimiento']:
+            flash('Por favor llena todos los campos', 'error')
+        else:
+            #Verificando que no tenga la misma identificación de otro
+            identificacion = request.form['numero']
+            if Participantes.query.filter_by(numero_documento=identificacion).count() > 0:
+                flash('El participante ya se encuentra en el sistema', 'error')
+            else:
+                #Agregando participante a la base de datos
+                persona = Participantes(tipo_documento=request.form['documento'],numero_documento=request.form['numero'],
+                nombres=request.form['nombres'],apellido=request.form['apellidos'],fecha_nacimiento=request.form['nacimiento'], recibio_premio='NO',premio='')
 
-        return render_template('index.html')
+                db.session.add(persona)
+                db.session.commit()
+
+                flash('Se ha ingresado el participante')
+
+    #Obteniendo todos los participantes para mostrarlos en tabla
+    participantes = Participantes.query.all()
+
+    return render_template('index.html')
 
 #url_for('function')
 #request.form['username']

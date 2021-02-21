@@ -41,10 +41,10 @@
 
                         <div class="col">
                             <label for="" >Tipo de documento </label>
-                            <select class="form-select" aria-label="Default select example">
-                            <option value="1">Tarjeta de identidad</option>
-                            <option value="2">Cédula de ciudadanía</option>
-                            <option value="3">Pasaporte</option>
+                            <select name="documento" class="form-select" aria-label="Default select example" >
+                            <option value="TI">Tarjeta de identidad</option>
+                            <option value="CC">Cédula de ciudadanía</option>
+                            <option value="PP">Pasaporte</option>
                             </select>
                         </div>
 
@@ -80,6 +80,27 @@
                     <div class="form-group align-items-center">
                     <button type="submit" class="boton btn btn-primary mx-0" >Ingresar participante</button>
                     </div>
+                    <br>
+
+
+                    {%- for category, message in get_flashed_messages(with_categories = true) %}
+
+                        {% if category=="error" %}
+                            <div class = "alert alert-danger">
+
+                                {{ message }}
+                            </div>
+                        {% endif %}
+
+                        {% if category=="message" %}
+                            <div class = "alert alert-success">
+
+                                {{ message }}
+                            </div>
+                        {% endif %}
+
+
+                    {%- endfor %}
 
 
 
