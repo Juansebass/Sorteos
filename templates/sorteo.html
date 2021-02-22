@@ -54,8 +54,42 @@
         </div>
 
         <div class="row">
-            
+             <div class="col-sm-2 mx-auto justify-content-center  ">
+                 <form action="{{url_for('sortear')}}" method="POST">
+                     <div class="form-group ">
+                         <button class="boton btn btn-primary mx-0" type="submit" onclick="return confirm('Quieres realizar el sorteo ?')">Realizar sorteo</button>
+                     </div>
+                 </form>
+                 <br>
+
+
+             </div>
+             {%- for category, message in get_flashed_messages(with_categories = true) %}
+
+                {% if category=="error" %}
+                    <div class = "alert alert-danger">
+
+                        {{ message }}
+                    </div>
+                {% endif %}
+            {% endfor %}
         </div>
+    </div>
+
+    <div class="row">
+
+        {% for participante in participantes%}
+        <div class="col-sm-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{participante.nombres}} {{participante.apellido}}</h5>
+                    <p class="card-text">{{participante.premio}}</p>
+                 </div>
+            </div>
+        </div>
+        {% endfor %}
+
+
     </div>
 
 

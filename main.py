@@ -1,5 +1,6 @@
 from flask import Flask, url_for, request, render_template, redirect, flash
 from flask_sqlalchemy import SQLAlchemy
+import random
 
 
 app = Flask(__name__)
@@ -100,3 +101,63 @@ def sorteo():
 
     premios = Premios.query.all()
     return render_template('sorteo.html', premios = premios)
+
+
+
+@app.route('/sortear', methods=['GET', 'POST'])
+def sortear():
+    if request.method == 'POST':
+        #Obteniendo lista con los participantes que no han ganado premio
+        participantes = Participantes.query.filter(Participantes.recibio_premio =='NO').all()
+
+        #Participantes sin prmios, totla de premios a entregar
+        total = len(participantes)
+
+
+
+
+
+
+
+
+        #Verificando Que se tengan participantes
+        if total > 0 :
+            #Creando lista con la posición de los participantes
+            posiciones = [x for x in range(0, total)]
+            #Ordenando la lista de forma aleatoria
+            random.shuffle(posiciones)
+
+            for i in posiciones:
+                #Obteniendo participante
+                participante = participantes[i]
+
+
+                #Obteniendo premios con cantidad mayor a 0
+                premios = Premios.query.filter(Premios.cantidad > 0).all()
+
+                #Asegurando que se tengan premios
+                if len(premios) > 0:
+                    pos = random.randint(0, len(premios) - 1)
+                    premio = premios[pos]
+
+                    #Asignando premio
+                    participante.premio = premio.descripcion
+                    participante.recibio_premio = "SI"
+                    premio.cantidad -= 1
+                    db.session.commit()
+                else:
+                    flash('No se tienen premios para sortear', 'error')
+                    break
+
+
+        else:
+            flash('No se tienen participantes para sortear los premios', 'error')
+
+
+
+
+        #Obteniendo Lista con los premios de la base de datos
+        premios= Premios.query.all()
+        participantes = Participantes.query.filter(Participantes.recibio_premio =='SI').all()
+
+    return render_template('sorteo.html', premios = premios, participantes =participantes)
