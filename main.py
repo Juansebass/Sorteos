@@ -5,7 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 app = Flask(__name__)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 #Configuranfo base de datos
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.sqlite3'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///datos.sqlite3'
 db = SQLAlchemy(app)
 
 #Creando modelo para guardar los participantesen la base de datos
@@ -21,6 +21,14 @@ class Participantes(db.Model):
     def __repr__(self):
         return '<Participantes %r>' % self.nombres
 
+#Creando modelo para guardar los premios
+class Premios(db.Model):
+    codigo =db.Column(db.Integer, primary_key=True)
+    descripcion = db.Column(db.String(100))
+    cantidad = db.Column(db.Integer)
+
+    def __repr__(self):
+        return '<Premios %r>' % self.codigo
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -85,3 +93,10 @@ def update():
         flash("Se ha editado el participante", 'editado')
 
         return redirect(url_for('inicial'))
+
+
+@app.route('/sorteo', methods=['GET', 'POST'])
+def sorteo():
+
+    premios = Premios.query.all()
+    return render_template('sorteo.html', premios = premios)
