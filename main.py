@@ -100,7 +100,8 @@ def update():
 def sorteo():
 
     premios = Premios.query.all()
-    return render_template('sorteo.html', premios = premios)
+    participantes = Participantes.query.filter(Participantes.recibio_premio =='SI').all()
+    return render_template('sorteo.html', premios = premios, participantes = participantes)
 
 
 
@@ -112,12 +113,6 @@ def sortear():
 
         #Participantes sin prmios, totla de premios a entregar
         total = len(participantes)
-
-
-
-
-
-
 
 
         #Verificando Que se tengan participantes
@@ -161,3 +156,7 @@ def sortear():
         participantes = Participantes.query.filter(Participantes.recibio_premio =='SI').all()
 
     return render_template('sorteo.html', premios = premios, participantes =participantes)
+
+
+if __name__ == "__main__":
+    app.run(debug=True)

@@ -1,0 +1,5 @@
+1. versión de python 3.7 o mayor
+2. instalar las dependencias que necesita la aplicación usando el archivo de texto instalar.txt
+	(pip install instalar.txt)
+3.Ejecutar el archivo main.py (En el directorio de la carpeta ejcutar con la consola python main.py)
+
